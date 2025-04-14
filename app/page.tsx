@@ -6,15 +6,16 @@ import Slider from "@/components/Slider"
 import SliderText from "@/components/SliderText"
 import SliderTextReverse from "@/components/SliderTextReverse"
 import CustomTextInput from "@/components/CustomTextInput"
+import { useChatContext } from "@/context/ChatContext"
 
 export default function HomePage() {
   const [textValue, setTextValue] = useState("")
   const router = useRouter()
+  const { setInitialMessage } = useChatContext()
 
   const handleSubmit = () => {
     if (textValue.trim()) {
-      // Store the message in localStorage instead of context
-      localStorage.setItem("initialMessage", textValue)
+      setInitialMessage(textValue)
       router.push("/ai-chatbot")
     }
   }
@@ -57,4 +58,3 @@ export default function HomePage() {
     </main>
   )
 }
-
