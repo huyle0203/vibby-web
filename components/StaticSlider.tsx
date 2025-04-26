@@ -22,7 +22,7 @@ export interface User {
 const data: User[] = [
   {
     id: 1,
-    profilePicture: "/images/penguin2.png",
+    profilePicture: "/images/penguin.png",
     name: "Vibby",
     username: "@vibby",
     bio: "ur favorite cat penguin that helps u vibe",
@@ -32,7 +32,7 @@ const data: User[] = [
     dislikes: "Negativity, cold weather",
     hobbies: ["Coding", "Dancing", "Watching anime"],
     pets: ["Virtual pet penguin"],
-    images: ["/images/penguin2.png", "/images/penguin2.png", "/images/penguin2.png"],
+    images: ["/images/penguin.png", "/images/penguin.png", "/images/penguin.png"],
     vibeFacts: [
       "I can speak 5 languages fluently",
       "I've never eaten a fish",
@@ -79,7 +79,7 @@ const data: User[] = [
   },
   {
     id: 4,
-    profilePicture: "/images/penguin2.png",
+    profilePicture: "/images/penguin.png",
     name: "Devam",
     username: "@dev_am",
     bio: "3rd year cs student bruh",
@@ -89,7 +89,7 @@ const data: User[] = [
     dislikes: "Bugs, all-nighters (but still do them)",
     hobbies: ["Coding", "Playing chess", "Solving puzzles"],
     pets: ["A rubber duck for debugging"],
-    images: ["/images/penguin2.png", "/images/penguin2.png", "/images/penguin2.png"],
+    images: ["/images/penguin.png", "/images/penguin.png", "/images/penguin.png"],
     vibeFacts: [
       "I've won 3 hackathons in the past year",
       "I can type at 120 WPM",
@@ -98,7 +98,7 @@ const data: User[] = [
   },
   {
     id: 5,
-    profilePicture: "/images/penguin2.png",
+    profilePicture: "/images/penguin.png",
     name: "Jason",
     username: "@jason_chen",
     bio: "handsome Chinese boy",
@@ -108,7 +108,7 @@ const data: User[] = [
     dislikes: "Early mornings, spicy food",
     hobbies: ["Photography", "Exploring new restaurants", "Learning languages"],
     pets: ["A goldfish named Nemo"],
-    images: ["/images/penguin2.png", "/images/penguin2.png", "/images/penguin2.png"],
+    images: ["/images/penguin.png", "/images/penguin.png", "/images/penguin.png"],
     vibeFacts: [
       "I've tried over 500 different street foods",
       "My photos have been featured in National Geographic",
@@ -117,7 +117,7 @@ const data: User[] = [
   },
   {
     id: 6,
-    profilePicture: "/images/penguin2.png",
+    profilePicture: "/images/penguin.png",
     name: "Huy",
     username: "@huy_creator",
     bio: "the creator of this app lmao",
@@ -127,7 +127,7 @@ const data: User[] = [
     dislikes: "Spaghetti code, scope creep",
     hobbies: ["Coding", "Designing UIs", "Playing video games"],
     pets: ["A cat named Pixel"],
-    images: ["/images/penguin2.png", "/images/penguin2.png", "/images/penguin2.png"],
+    images: ["/images/penguin.png", "/images/penguin.png", "/images/penguin.png"],
     vibeFacts: [
       "I've launched 5 apps in the past year",
       "I can code in 10 different programming languages",

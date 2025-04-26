@@ -61,4 +61,3 @@ function BigButton({ onClick }: { onClick: () => void }) {
     </button>
   )
 }
-
