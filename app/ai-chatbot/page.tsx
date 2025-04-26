@@ -117,7 +117,7 @@ export default function AIChatbotPage() {
             <div key={index} className={`flex mb-4 ${message.role === "user" ? "justify-end" : "justify-start"}`}>
               {message.role === "assistant" && (
                 <div className="w-8 h-8 rounded-full overflow-hidden mr-2 flex-shrink-0">
-                  <Image src="/images/penguin2.png" alt="Vibby" width={32} height={32} />
+                  <Image src="/images/penguin.png" alt="Vibby" width={32} height={32} />
                 </div>
               )}
               <div
