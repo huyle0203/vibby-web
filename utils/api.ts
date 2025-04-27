@@ -1,6 +1,5 @@
 import axios from "axios"
 
-// Using the provided API key and Assistant ID
 
 
 export const callOpenAIAssistant = async (message: string) => {
