@@ -137,8 +137,10 @@ export default function ProfilePage() {
     setIsSettingsModalVisible(true)
   }
 
-  const handleRefresh = async () => {
-    await fetchUserData()
+  const handleCloseEditProfileModal = () => {
+    setIsEditProfileModalVisible(false)
+    // Refresh user data when the edit modal is closed
+    fetchUserData()
   }
 
   // Show loading state
@@ -270,7 +272,7 @@ export default function ProfilePage() {
         <>
           <EditProfileModal
             isVisible={isEditProfileModalVisible}
-            onClose={() => setIsEditProfileModalVisible(false)}
+            onClose={handleCloseEditProfileModal}
             userImages={userImages}
             onImagesUpdate={setUserImages}
             user={{

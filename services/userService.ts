@@ -193,6 +193,29 @@ export const fetchUserTags = async (userId: string): Promise<{ success: boolean;
   }
 }
 
+export const updateUserTags = async (
+  userId: string,
+  tags: string[],
+): Promise<{ success: boolean; tags?: string[]; msg?: string }> => {
+  // In preview mode, simulate success
+  if (isPreviewMode()) {
+    return { success: true, tags }
+  }
+
+  try {
+    const { error } = await supabase.from("users").update({ tags }).eq("id", userId)
+
+    if (error) {
+      throw error
+    }
+
+    return { success: true, tags }
+  } catch (error) {
+    console.error("Error updating user tags:", error)
+    return { success: false, msg: (error as Error).message }
+  }
+}
+
 export const updateUserImages = async (
   userId: string,
   images: string[],

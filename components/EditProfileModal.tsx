@@ -2,9 +2,12 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
-import { ChevronRight, Edit } from "lucide-react"
+import { ChevronRight, Edit, Loader2 } from "lucide-react"
 import VibeFactEditModal from "./VibeFactEditModal"
 import EditFieldModal from "./EditFieldModal"
+import { updateUserData, updateUserImages } from "@/services/userService"
+import { useAuth } from "@/context/AuthContext"
+import TagSelectionModal from "./TagSelectionModal"
 
 interface UserData {
   id: string
@@ -47,23 +50,89 @@ export default function EditProfileModal({
   const [editingField, setEditingField] = useState<string | null>(null)
   const [changedFields, setChangedFields] = useState<Partial<UserData>>({})
   const [userTags, setUserTags] = useState<string[]>(user?.tags || [])
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const [saveSuccess, setSaveSuccess] = useState(false)
+  const { user: authUser } = useAuth()
+  const [isTagSelectionModalVisible, setIsTagSelectionModalVisible] = useState(false)
 
   useEffect(() => {
-    if (!isVisible) {
-      // Reset state when modal closes
-      setActiveTab("Edit")
+    if (isVisible) {
+      // Reset state when modal opens with current user data
+      setName(user?.name || "")
+      setBio(user?.highlight_bio || "")
+      setLookingFor(user?.looking_for || "")
+      setLikes(user?.likes || "")
+      setDislikes(user?.dislikes || "")
+      setVibeFacts(user?.facts || ["", "", ""])
+      setUserTags(user?.tags || [])
       setChangedFields({})
+      setSaveError(null)
+      setSaveSuccess(false)
     }
-  }, [isVisible])
+  }, [isVisible, user])
 
   const handleTabPress = (tab: string) => {
     setActiveTab(tab)
   }
 
   const handleSave = async () => {
-    // In a real app, you would save the changes to your backend
-    console.log("Saving changes:", changedFields)
-    onClose()
+    if (!authUser?.id) {
+      setSaveError("User not authenticated")
+      return
+    }
+
+    setIsSaving(true)
+    setSaveError(null)
+    setSaveSuccess(false)
+
+    try {
+      // Prepare the data to update
+      const updateData: Partial<UserData> = {
+        ...changedFields,
+      }
+
+      // Only include fields that have changed
+      if (name !== user.name) updateData.name = name
+      if (bio !== user.highlight_bio) updateData.highlight_bio = bio
+      if (lookingFor !== user.looking_for) updateData.looking_for = lookingFor
+      if (likes !== user.likes) updateData.likes = likes
+      if (dislikes !== user.dislikes) updateData.dislikes = dislikes
+
+      // Check if facts have changed
+      const factsChanged = JSON.stringify(vibeFacts) !== JSON.stringify(user.facts)
+      if (factsChanged) updateData.facts = vibeFacts.filter((fact) => fact.trim() !== "")
+
+      // Check if tags have changed
+      const tagsChanged = JSON.stringify(userTags) !== JSON.stringify(user.tags)
+      if (tagsChanged) updateData.tags = userTags
+
+      // Update user data in Supabase
+      const { success, msg } = await updateUserData(authUser.id, updateData)
+
+      // Update images if they've changed
+      const imagesChanged = JSON.stringify(userImages) !== JSON.stringify(user.images)
+      if (imagesChanged) {
+        const imageResult = await updateUserImages(authUser.id, userImages)
+        if (!imageResult.success) {
+          throw new Error(imageResult.msg || "Failed to update images")
+        }
+      }
+
+      if (!success) {
+        throw new Error(msg || "Failed to update profile")
+      }
+
+      setSaveSuccess(true)
+      setTimeout(() => {
+        onClose()
+      }, 1500)
+    } catch (error) {
+      console.error("Error saving profile:", error)
+      setSaveError((error as Error).message || "An error occurred while saving")
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const handleFieldChange = (fieldName: string, value: string) => {
@@ -158,8 +227,7 @@ export default function EditProfileModal({
   }
 
   const handleTagsPress = () => {
-    // In a real app, you would navigate to a tag selection screen
-    console.log("Navigate to tag selection")
+    setIsTagSelectionModalVisible(true)
   }
 
   if (!isVisible) return null
@@ -172,10 +240,23 @@ export default function EditProfileModal({
             Cancel
           </button>
           <h2 className="text-primary font-bold text-lg">Edit Profile</h2>
-          <button className="text-white" onClick={handleSave}>
+          <button className="text-white flex items-center" onClick={handleSave} disabled={isSaving}>
+            {isSaving ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : null}
             Save
           </button>
         </div>
+
+        {saveError && (
+          <div className="bg-red-500 bg-opacity-20 border border-red-500 text-red-500 px-4 py-2 mx-4 mt-2 rounded">
+            {saveError}
+          </div>
+        )}
+
+        {saveSuccess && (
+          <div className="bg-green-500 bg-opacity-20 border border-green-500 text-green-500 px-4 py-2 mx-4 mt-2 rounded">
+            Profile updated successfully!
+          </div>
+        )}
 
         <div className="flex border-b border-gray-800">
           <button
@@ -316,6 +397,15 @@ export default function EditProfileModal({
         }
         onSave={handleSaveField}
         maxLength={editingField === "highlight_bio" ? MAX_BIO_LENGTH : MAX_OTHER_LENGTH}
+      />
+      <TagSelectionModal
+        isVisible={isTagSelectionModalVisible}
+        onClose={() => setIsTagSelectionModalVisible(false)}
+        initialTags={userTags}
+        onTagsUpdate={(tags) => {
+          setUserTags(tags)
+          setChangedFields((prev) => ({ ...prev, tags }))
+        }}
       />
     </div>
   )
