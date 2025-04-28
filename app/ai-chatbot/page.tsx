@@ -27,11 +27,9 @@ export default function AIChatbotPage() {
   const router = useRouter()
 
   useEffect(() => {
-    // If there's an initial message, process it
     if (initialMessage) {
       handleInitialMessage()
     }
-    // If there are no messages yet, add a welcome message
     else if (messages.length === 0) {
       setMessages([
         {

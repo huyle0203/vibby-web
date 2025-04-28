@@ -30,7 +30,6 @@ export default function Slider() {
       const viewportWidth = containerRef.current?.offsetWidth || 0
       const distance = containerWidth - viewportWidth
 
-      // Only animate if there's content to scroll
       if (distance > 0) {
         await controls.start({
           x: -distance,
@@ -46,7 +45,6 @@ export default function Slider() {
 
     startAnimation()
 
-    // Re-run animation when window is resized
     const handleResize = () => {
       controls.stop()
       startAnimation()

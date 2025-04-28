@@ -13,7 +13,7 @@ import { fetchUserProfile, fetchUserFacts, fetchUserImages, fetchUserTags } from
 import { fetchUserPosts } from "@/services/postService"
 import { isSupabaseConfigured, isPreviewMode } from "@/lib/supabase"
 
-// Mock data for preview mode
+// mock data in preview mode
 const MOCK_POSTS = [
   {
     id: "preview-post-1",
@@ -56,7 +56,6 @@ export default function ProfilePage() {
   useEffect(() => {
     if (user && !loading) {
       if (isPreviewMode()) {
-        // Use mock data in preview mode
         setUserProfile({
           name: user.name,
           profile_picture: user.profile_picture,
@@ -71,7 +70,7 @@ export default function ProfilePage() {
         setVibeFacts(user.facts || [])
         setUserPosts(MOCK_POSTS)
       } else {
-        // Fetch real data
+        // fetches real (not mock) data
         fetchUserData()
       }
     }
@@ -139,11 +138,10 @@ export default function ProfilePage() {
 
   const handleCloseEditProfileModal = () => {
     setIsEditProfileModalVisible(false)
-    // Refresh user data when the edit modal is closed
     fetchUserData()
   }
 
-  // Show loading state
+  // displays when loading
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen bg-black text-white items-center justify-center">
@@ -152,7 +150,6 @@ export default function ProfilePage() {
     )
   }
 
-  // If no user is authenticated, show a login prompt
   if (!isAuthenticated) {
     return (
       <div className="flex flex-col min-h-screen bg-black text-white items-center justify-center">

@@ -29,7 +29,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-// Mock data for preview mode
+// uses mock data in preview mode
 const MOCK_USER: User = {
   id: "preview-user-id",
   email: "preview@example.com",
@@ -60,21 +60,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const preview = isPreviewMode()
 
   useEffect(() => {
-    // If in preview mode, use mock data
     if (preview) {
       setUser(MOCK_USER)
       setLoading(false)
       return
     }
 
-    // Check if Supabase is configured
     if (!isSupabaseConfigured()) {
       console.warn("Supabase is not configured. Authentication will not work.")
       setLoading(false)
       return
     }
 
-    // Get initial session
     const getInitialSession = async () => {
       try {
         const {
@@ -83,7 +80,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setSession(session)
 
         if (session?.user) {
-          // Fetch user profile data
           const { data, error } = await supabase.from("users").select("*").eq("id", session.user.id).single()
 
           if (!error && data) {
@@ -93,7 +89,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
               ...data,
             })
           } else {
-            // If user doesn't exist in the users table, create a basic record
+            // if no user
             const { data: newUser, error: createError } = await supabase
               .from("users")
               .insert({
@@ -122,14 +118,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     getInitialSession()
 
-    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
 
       if (session?.user) {
-        // Fetch user profile data when auth state changes
         supabase
           .from("users")
           .select("*")
@@ -156,7 +150,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signIn = async (email: string, password: string) => {
     if (preview) {
-      // In preview mode, simulate successful login with mock user
       setUser(MOCK_USER)
       return { success: true }
     }
@@ -184,7 +177,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signOut = async () => {
     if (preview) {
-      // In preview mode, just clear the user
       setUser(null)
       return
     }
@@ -195,7 +187,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const setUserData = async (userData: Partial<User>) => {
     if (preview) {
-      // In preview mode, just update the local state
       setUser((prevUser) => (prevUser ? { ...prevUser, ...userData } : null))
       return
     }

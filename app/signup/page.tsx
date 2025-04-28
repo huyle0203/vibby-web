@@ -29,7 +29,6 @@ export default function SignupPage() {
     setLoading(true)
 
     try {
-      // Sign up with Supabase
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -45,7 +44,7 @@ export default function SignupPage() {
       }
 
       if (data.user) {
-        // Create user profile in the users table
+        // inserts user into supabase table
         const { error: profileError } = await supabase.from("users").insert({
           id: data.user.id,
           email: data.user.email,
@@ -56,7 +55,6 @@ export default function SignupPage() {
           throw profileError
         }
 
-        // Redirect to profile page
         router.push("/profile")
       }
     } catch (err: any) {

@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-embeddings": "ts-node generate-embedding.ts"
+    "generate-embeddings": "node --loader ts-node/esm generate-embedding.ts"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",

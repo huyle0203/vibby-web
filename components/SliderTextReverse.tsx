@@ -40,7 +40,6 @@ export default function SliderTextReverse() {
 
     animate()
 
-    // Re-run animation when window is resized
     const handleResize = () => {
       controls.stop()
       animate()

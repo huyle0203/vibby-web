@@ -12,7 +12,6 @@ interface TagSelectionModalProps {
   onTagsUpdate: (tags: string[]) => void
 }
 
-// Tag categories with emojis
 const categories = [
   {
     title: "Hobbies",

@@ -6,7 +6,6 @@ interface PostData {
   images?: string[]
 }
 
-// Mock data for preview mode
 const MOCK_POSTS = [
   {
     id: "preview-post-1",
@@ -31,7 +30,6 @@ const MOCK_POSTS = [
 ]
 
 export const createPost = async (postData: PostData): Promise<{ success: boolean; data?: any; msg?: string }> => {
-  // In preview mode, simulate success
   if (isPreviewMode()) {
     return {
       success: true,
@@ -78,7 +76,6 @@ export const createPost = async (postData: PostData): Promise<{ success: boolean
 }
 
 export const fetchUserPosts = async (userId: string): Promise<{ success: boolean; posts?: any[]; msg?: string }> => {
-  // In preview mode, return mock data
   if (isPreviewMode()) {
     return { success: true, posts: MOCK_POSTS }
   }
@@ -102,7 +99,6 @@ export const fetchUserPosts = async (userId: string): Promise<{ success: boolean
 }
 
 export const getPostWithAverageVibe = async (postId: string) => {
-  // In preview mode, return mock data
   if (isPreviewMode()) {
     const mockPost = MOCK_POSTS.find((post) => post.id === postId) || MOCK_POSTS[0]
     return {
@@ -134,7 +130,6 @@ export const getPostWithAverageVibe = async (postId: string) => {
 }
 
 export const updatePostVibe = async (postId: string, userId: string, vibePercentage: number) => {
-  // In preview mode, simulate success
   if (isPreviewMode()) {
     return {
       success: true,
@@ -144,7 +139,6 @@ export const updatePostVibe = async (postId: string, userId: string, vibePercent
   }
 
   try {
-    // First, upsert the user's vibe for this post
     const { error: upsertError } = await supabase
       .from("post_vibes")
       .upsert({ post_id: postId, user_id: userId, vibe_percentage: vibePercentage }, { onConflict: "post_id,user_id" })
@@ -153,9 +147,6 @@ export const updatePostVibe = async (postId: string, userId: string, vibePercent
       throw upsertError
     }
 
-    // Then, calculate the new average vibe and update the post
-    // Note: This assumes you have a function in your database to calculate average vibe
-    // If not, you'll need to fetch all vibes and calculate the average manually
     const { data: vibes, error: vibesError } = await supabase
       .from("post_vibes")
       .select("vibe_percentage")
@@ -191,7 +182,6 @@ export const uploadPostImage = async (
   userId: string,
   file: File,
 ): Promise<{ success: boolean; url?: string; msg?: string }> => {
-  // In preview mode, simulate success
   if (isPreviewMode()) {
     return { success: true, url: "/images/penguin.png" }
   }
@@ -201,7 +191,6 @@ export const uploadPostImage = async (
     const fileName = `${userId}-${Date.now()}.${fileExt}`
     const filePath = `${userId}/${fileName}`
 
-    // Upload the file to Supabase storage
     const { error: uploadError } = await supabase.storage.from("post-images").upload(filePath, file, {
       cacheControl: "3600",
       upsert: true,
@@ -211,7 +200,6 @@ export const uploadPostImage = async (
       throw uploadError
     }
 
-    // Get the public URL
     const { data: urlData } = supabase.storage.from("post-images").getPublicUrl(filePath)
 
     if (!urlData.publicUrl) {

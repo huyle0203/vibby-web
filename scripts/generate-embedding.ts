@@ -1,17 +1,16 @@
-// generate-embeddings.ts
 import { createClient } from '@supabase/supabase-js';
-import OpenAI from 'openai';
+import { OpenAI } from 'openai';
 
-// Use the provided API keys
+// insert API keys!
+// const OPENAI_API_KEY = ;
+// const SUPABASE_URL = ;
+// const SUPABASE_ANON_KEY = ;
+// const SUPABASE_SERVICE_ROLE_KEY = ;
 
-
-// Initialize OpenAI client
 const openai = new OpenAI({
   apiKey: OPENAI_API_KEY,
 });
 
-// Initialize Supabase client
-// Initialize Supabase client with SERVICE ROLE KEY
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
   auth: {
     autoRefreshToken: false,
@@ -32,7 +31,6 @@ async function generateEmbeddingsForUsers(): Promise<void> {
   console.log("Starting embedding generation...");
 
   try {
-    // 1. Fetch users (disable RLS in dashboard if needed)
     const { data: users, error } = await supabase
       .from('users')
       .select('id, name, tags, facts, likes, looking_for');
@@ -58,7 +56,6 @@ async function generateEmbeddingsForUsers(): Promise<void> {
 
         console.log(`Processing ${user.name} (${user.id})`);
 
-        // 2. Proper OpenAI response handling
         const embeddingResponse = await openai.embeddings.create({
           model: "text-embedding-ada-002",
           input: interests,
@@ -66,7 +63,6 @@ async function generateEmbeddingsForUsers(): Promise<void> {
 
         const embedding = embeddingResponse.data[0].embedding;
 
-        // 3. Update without rpc()
         const { error: updateError } = await supabase
           .from('users')
           .update({ embedding })
@@ -74,7 +70,6 @@ async function generateEmbeddingsForUsers(): Promise<void> {
 
         if (updateError) throw updateError;
 
-        // Verification
         const { data: verifiedUser } = await supabase
           .from('users')
           .select('embedding')

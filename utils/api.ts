@@ -1,8 +1,11 @@
 import axios from "axios"
 
+// insert API keys!
+// const OPENAI_API_KEY = 
+// const ASSISTANT_ID = 
+// const OPENAI_API_ENDPOINT = 
 
 
-// Create API instance with the API key
 const api = axios.create({
   baseURL: OPENAI_API_ENDPOINT,
   headers: {
@@ -37,10 +40,10 @@ export const callOpenAIAssistant = async (message: string) => {
     console.log("Waiting for run to complete...")
     let runStatus
     let attempts = 0
-    const maxAttempts = 30 // Prevent infinite loops
+    const maxAttempts = 30 // stops infinite loops
 
     do {
-      await new Promise((resolve) => setTimeout(resolve, 1000)) // Wait for 1 second
+      await new Promise((resolve) => setTimeout(resolve, 1000)) // waits 1 second
       const statusResponse = await api.get(`/threads/${threadId}/runs/${runId}`)
       runStatus = statusResponse.data.status
       console.log("Run status:", runStatus)
@@ -75,7 +78,6 @@ export const callOpenAIAssistant = async (message: string) => {
     console.error("Error calling OpenAI Assistant API:", error)
     console.error("Error details:", error.response?.data || error.message)
 
-    // Return a fallback response
     return "Sorry, I'm having trouble connecting to my brain right now. Could you try again in a moment?"
   }
 }

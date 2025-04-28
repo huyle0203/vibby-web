@@ -58,7 +58,6 @@ export default function EditProfileModal({
 
   useEffect(() => {
     if (isVisible) {
-      // Reset state when modal opens with current user data
       setName(user?.name || "")
       setBio(user?.highlight_bio || "")
       setLookingFor(user?.looking_for || "")
@@ -87,30 +86,25 @@ export default function EditProfileModal({
     setSaveSuccess(false)
 
     try {
-      // Prepare the data to update
       const updateData: Partial<UserData> = {
         ...changedFields,
       }
 
-      // Only include fields that have changed
+      // only includes any changed attributes
       if (name !== user.name) updateData.name = name
       if (bio !== user.highlight_bio) updateData.highlight_bio = bio
       if (lookingFor !== user.looking_for) updateData.looking_for = lookingFor
       if (likes !== user.likes) updateData.likes = likes
       if (dislikes !== user.dislikes) updateData.dislikes = dislikes
 
-      // Check if facts have changed
       const factsChanged = JSON.stringify(vibeFacts) !== JSON.stringify(user.facts)
       if (factsChanged) updateData.facts = vibeFacts.filter((fact) => fact.trim() !== "")
 
-      // Check if tags have changed
       const tagsChanged = JSON.stringify(userTags) !== JSON.stringify(user.tags)
       if (tagsChanged) updateData.tags = userTags
 
-      // Update user data in Supabase
       const { success, msg } = await updateUserData(authUser.id, updateData)
 
-      // Update images if they've changed
       const imagesChanged = JSON.stringify(userImages) !== JSON.stringify(user.images)
       if (imagesChanged) {
         const imageResult = await updateUserImages(authUser.id, userImages)
@@ -165,8 +159,7 @@ export default function EditProfileModal({
   )
 
   const handleImagePick = async (index: number) => {
-    // In a real app, you would implement image picking functionality
-    // For now, we'll just use a placeholder
+    // uses a placeholder image (penguin)
     const newImages = [...userImages]
     newImages[index] = "/images/penguin.png"
     handleImageChange(newImages)

@@ -17,7 +17,6 @@ interface UserData {
 }
 
 export const getUserData = async (userId: string): Promise<{ success: boolean; msg?: string; data?: UserData }> => {
-  // In preview mode, return mock data
   if (isPreviewMode()) {
     return {
       success: true,
@@ -51,7 +50,6 @@ export const getUserData = async (userId: string): Promise<{ success: boolean; m
 export const fetchUserProfile = async (
   userId: string,
 ): Promise<{ success: boolean; data?: Partial<UserData>; msg?: string }> => {
-  // In preview mode, return mock data
   if (isPreviewMode()) {
     return {
       success: true,
@@ -85,7 +83,6 @@ export const fetchUserProfile = async (
 }
 
 export const updateUserData = async (userId: string, updateData: Partial<UserData>) => {
-  // In preview mode, simulate success
   if (isPreviewMode()) {
     return { success: true, data: { id: userId, ...updateData } }
   }
@@ -107,7 +104,6 @@ export const updateUserData = async (userId: string, updateData: Partial<UserDat
 export const fetchUserHighlightBio = async (
   userId: string,
 ): Promise<{ success: boolean; highlightBio?: string; msg?: string }> => {
-  // In preview mode, return mock data
   if (isPreviewMode()) {
     return { success: true, highlightBio: "This is a preview account for testing the UI without Supabase." }
   }
@@ -127,7 +123,6 @@ export const fetchUserHighlightBio = async (
 }
 
 export const fetchUserFacts = async (userId: string): Promise<{ success: boolean; facts?: string[]; msg?: string }> => {
-  // In preview mode, return mock data
   if (isPreviewMode()) {
     return {
       success: true,
@@ -154,7 +149,6 @@ export const fetchUserFacts = async (userId: string): Promise<{ success: boolean
 }
 
 export const fetchUserImages = async (userId: string): Promise<{ success: boolean; urls?: string[]; msg?: string }> => {
-  // In preview mode, return mock data
   if (isPreviewMode()) {
     return { success: true, urls: ["/images/penguin.png", "/images/penguin.png", "/images/penguin.png"] }
   }
@@ -174,7 +168,6 @@ export const fetchUserImages = async (userId: string): Promise<{ success: boolea
 }
 
 export const fetchUserTags = async (userId: string): Promise<{ success: boolean; tags?: string[]; msg?: string }> => {
-  // In preview mode, return mock data
   if (isPreviewMode()) {
     return { success: true, tags: ["Preview", "Testing", "Development"] }
   }
@@ -197,7 +190,6 @@ export const updateUserTags = async (
   userId: string,
   tags: string[],
 ): Promise<{ success: boolean; tags?: string[]; msg?: string }> => {
-  // In preview mode, simulate success
   if (isPreviewMode()) {
     return { success: true, tags }
   }
@@ -220,7 +212,6 @@ export const updateUserImages = async (
   userId: string,
   images: string[],
 ): Promise<{ success: boolean; urls?: string[]; msg?: string }> => {
-  // In preview mode, simulate success
   if (isPreviewMode()) {
     return { success: true, urls: images }
   }
@@ -243,7 +234,6 @@ export const uploadProfileImage = async (
   userId: string,
   file: File,
 ): Promise<{ success: boolean; url?: string; msg?: string }> => {
-  // In preview mode, simulate success
   if (isPreviewMode()) {
     return { success: true, url: "/images/penguin.png" }
   }
@@ -253,7 +243,6 @@ export const uploadProfileImage = async (
     const fileName = `${userId}-${Date.now()}.${fileExt}`
     const filePath = `${userId}/${fileName}`
 
-    // Upload the file to Supabase storage
     const { error: uploadError } = await supabase.storage.from("avatars").upload(filePath, file, {
       cacheControl: "3600",
       upsert: true,
@@ -263,14 +252,12 @@ export const uploadProfileImage = async (
       throw uploadError
     }
 
-    // Get the public URL
     const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(filePath)
 
     if (!urlData.publicUrl) {
       throw new Error("Failed to get public URL")
     }
 
-    // Update the user's profile_picture field
     const { error: updateError } = await supabase
       .from("users")
       .update({ profile_picture: urlData.publicUrl })

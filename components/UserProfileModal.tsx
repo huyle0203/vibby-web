@@ -19,13 +19,11 @@ export default function UserProfileModal({ isVisible, onClose, user }: UserProfi
     if (isVisible) {
       setIsRendered(true)
       setIsAnimating(true)
-      // Prevent body scrolling when modal is open
       document.body.style.overflow = "hidden"
     } else {
       setIsAnimating(false)
       const timer = setTimeout(() => {
         setIsRendered(false)
-        // Re-enable body scrolling when modal is closed
         document.body.style.overflow = ""
       }, 300)
       return () => clearTimeout(timer)

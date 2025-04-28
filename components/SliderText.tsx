@@ -40,7 +40,6 @@ export default function SliderText() {
 
     animate()
 
-    // Re-run animation when window is resized
     const handleResize = () => {
       controls.stop()
       animate()

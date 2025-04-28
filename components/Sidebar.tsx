@@ -14,12 +14,10 @@ export default function Sidebar() {
 
   return (
     <div className="fixed left-0 top-0 h-full w-16 bg-black border-r border-gray-800 flex flex-col items-center py-6">
-      {/* Logo at the top */}
       <Link href="/" className="mb-8 transition-transform hover:scale-110">
         <Image src="/images/penguin.png" alt="Vibby" width={40} height={40} className="w-10 h-10" />
       </Link>
 
-      {/* Navigation icons */}
       <div className="flex-1 flex flex-col items-center justify-center gap-8">
         <NavItem href="/" icon={<Home size={28} />} isActive={pathname === "/"} />
         <NavItem href="/discover" icon={<Zap size={28} />} isActive={pathname === "/discover"} />
