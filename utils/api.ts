@@ -2,6 +2,17 @@ import axios from "axios"
 
 
 
+// Create API instance with the API key
+const api = axios.create({
+  baseURL: OPENAI_API_ENDPOINT,
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${OPENAI_API_KEY}`,
+    "OpenAI-Beta": "assistants=v2",
+  },
+})
+
+
 export const callOpenAIAssistant = async (message: string) => {
   try {
     console.log("Creating thread...")
