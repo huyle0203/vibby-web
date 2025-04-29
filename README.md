@@ -11,13 +11,13 @@ Data Preparation and Setup:
 
 Application and Code:
 
-	Make sure to add your own OpenAI and Supabase API keys at the top of utils/api.ts as well as scripts/generate-embedding.ts:
+	Make sure to insert the OpenAI and Supabase API keys (included in canvas submission) at the top of utils/api.ts as well as scripts/generate-embedding.ts:
  		api.ts keys: OPENAI_API_KEY, ASSISTANT_ID, OPENAI_API_ENDPOINT
    		generate-embedding.ts keys: OPENAI_API_KEY, SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
 	
  	We run the project using yarn. After cloning the repo, you can install using "yarn install". You can then run the project on localhost using "yarn run dev".
 
-	If you wish to test the embedding script, simply run "yarn generate-embeddings" to generate new vector embeddings based on the info currently in the users table.
+	If you wish to test the embedding script, run "node --loader ts-node/esm scripts/generate-embedding.ts" to generate new vector embeddings based on the info currently in the users table.
 
 
 Images of Application:
