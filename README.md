@@ -26,3 +26,5 @@ Images of Application:
  	![image](https://github.com/user-attachments/assets/e4652d3e-76be-4620-9c9f-6c890f6b2618)
 
 
+Note: To see "Edit Profile" functionality, view "navin" branch
+
